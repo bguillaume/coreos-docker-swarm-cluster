@@ -13,7 +13,7 @@ if [ "$role" == "manager" ]; then
     echo "INITINALIZING DOCKER SWARM..."
     $slack -m "_${COREOS_PUBLIC_IPV4}_: Initiailizing docker swarm cluster" -u $SLACK_WEBHOOK_URL -c "$SLACK_CHANNEL"
     
-    docker swarm init --advertise-addr ${COREOS_PRIVATE_IPV4}
+    docker swarm init --advertise-addr ${COREOS_PUBLIC_IPV4}
     etcdctl set /swarm/manager-join-token `docker swarm join-token -q manager`
     etcdctl set /swarm/worker-join-token `docker swarm join-token -q worker`
   else
