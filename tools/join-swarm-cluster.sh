@@ -3,7 +3,7 @@
 cluster_config_dir=/etc/coreos-docker-swarm-cluster
 slack=$cluster_config_dir/tools/send-message-to-slack.sh
 
-MANAGER_ADVERTISE_ADDR=`curl http://${COREOS_PUBLIC_IPV4}:2379/v2/keys/nodes/managers | jq -r '.node.nodes[0].value'`
+MANAGER_ADVERTISE_ADDR=`curl http://${COREOS_PRIVATE_IPV4}:2379/v2/keys/nodes/managers | jq -r '.node.nodes[0].value'`
 
 role=$1
 
@@ -19,12 +19,12 @@ if [ "$role" == "manager" ]; then
   else
     echo "JOINING DOCKER SWARM..."
     $slack -m "_${COREOS_PUBLIC_IPV4}_: Joining existing docker swarm cluster as $role" -u $SLACK_WEBHOOK_URL -c "$SLACK_CHANNEL"
-    docker swarm join --token `curl http://${COREOS_PUBLIC_IPV4}:2379/v2/keys/swarm/manager-join-token | jq -r '.node.value'` ${MANAGER_ADVERTISE_ADDR}:2377
+    docker swarm join --token `curl -s http://${COREOS_PRIVATE_IPV4}:2379/v2/keys/swarm/manager-join-token | jq -r '.node.value'` ${MANAGER_ADVERTISE_ADDR}:2377
   fi
 
 elif [ "$role" == "worker" ]; then
 
-  token=`curl http://${COREOS_PUBLIC_IPV4}:2379/v2/keys/swarm/worker-join-token | jq -r '.node.value'`
+  token=`curl -s http://${COREOS_PRIVATE_IPV4}:2379/v2/keys/swarm/worker-join-token | jq -r '.node.value'`
   if [ "$token" == "null" ]; then
     echo "Failed to find join token for a worker node in the swarm cluster!"
     exit -1

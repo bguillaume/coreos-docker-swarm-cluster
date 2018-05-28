@@ -3,7 +3,9 @@
 echo "------------------------------"
 echo "BOOTSTRAP FOR $1 IS RUNNING"
 
-while [ "`curl -s http://${COREOS_PUBLIC_IPV4}:2379/v2/keys/nodes/bootstrapping | jq -r '.node.value'`" != "null" ]; do
+echo $COREOS_PUBLIC_IPV4
+
+while [ "`curl -s http://${COREOS_PRIVATE_IPV4}:2379/v2/keys/nodes/bootstrapping | jq -r '.node.value'`" != "null" ]; do
   echo "An other node is bootstrapping, waiting 5 seconds..."
   sleep 5
 done
