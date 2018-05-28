@@ -3,7 +3,7 @@
 cluster_config_dir=/etc/coreos-docker-swarm-cluster
 slack=$cluster_config_dir/tools/send-message-to-slack.sh
 
-MANAGER_ADVERTISE_ADDR=`curl http://${COREOS_PRIVATE_IPV4}:2379/v2/keys/nodes/managers | jq -r '.node.nodes[0].value'`
+MANAGER_ADVERTISE_ADDR=`curl -s http://${COREOS_PRIVATE_IPV4}:2379/v2/keys/nodes/managers | jq -r '.node.nodes[0].value'`
 
 role=$1
 
