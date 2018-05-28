@@ -1,9 +1,9 @@
 [Unit]
 Description=Node lifecycle service
-Requires=etcd2.service
+Requires=etcd-member.service
 Requires=network-online.target
 Requires=systemd-resolved.service
-After=etcd2.service
+After=etcd-member.service
 After=network-online.target
 After=systemd-resolved.service
 

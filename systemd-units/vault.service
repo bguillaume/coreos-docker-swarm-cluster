@@ -1,9 +1,9 @@
 [Unit]
 Description=Vault Server
 Requires=docker.service
-Requires=etcd2.service
+Requires=etcd-member.service
 After=docker.service
-After=etcd2.service
+After=etcd-member.service
 
 [Service]
 EnvironmentFile=-/etc/environment
